@@ -87,34 +87,34 @@ Func ProcessKeypress($struct)
        Case $VK_SHIFT ; only set priming here because user might still press other keys before releasing
             If BitAnd(0x0001,$struct.Flags) Then 
                If $shiftprimed Then
-                  HotKeySet('+{c}')
-                  HotKeySet('+{g}')
-                  HotKeySet('+{q}')
+                  HotKeySet('+{i}')
+                  HotKeySet('+{p}')
+                  HotKeySet('+{o}')
                EndIf
                $shiftprimed = False
             ElseIf (Not $shiftprimed) And ($sks($VK_LSHIFT) And $sks($VK_RSHIFT)) Then
-               HotKeySet('+{c}',UnsetSelf)
-               HotKeySet('+{g}',UnsetSelf)
-               HotKeySet('+{q}',UnsetSelf)
+               HotKeySet('+{i}',UnsetSelf)
+               HotKeySet('+{p}',UnsetSelf)
+               HotKeySet('+{o}',UnsetSelf)
                $shiftprimed = True
             EndIf
-       Case $VK_CAPS ; only set priming here because user might still press other keys before releasing
+       Case $VK_OEM_3 ; only set priming here because user might still press other keys before releasing
             If BitAnd(0x0001,$struct.Flags) Then 
                If $capsprimed Then
-                  HotKeySet('{c}')
-                  HotKeySet('{g}')
-                  HotKeySet('{q}')
+                  HotKeySet('{i}')
+                  HotKeySet('{p}')
+                  HotKeySet('{o}')
                EndIf
                $capsprimed = False
-            ElseIf Not $capsprimed Then
-               HotKeySet('{c}',UnsetSelf)
-               HotKeySet('{g}',UnsetSelf)
-               HotKeySet('{q}',UnsetSelf)
+            ElseIf Not $capsprimed Then 
+               HotKeySet('{i}',UnsetSelf)
+               HotKeySet('{p}',UnsetSelf)
+               HotKeySet('{o}',UnsetSelf)
                $capsprimed = True
             EndIf
-       Case $VK_ESC, $VK_Q
+       Case $VK_ESC, $VK_O
             If BitAnd(0x0001,$struct.Flags) Then 
-               If $VK_Q = $struct.VKey And Not ( $sks($VK_CAPS) Or ($sks($VK_LSHIFT) And $sks($VK_RSHIFT)) ) Then Return
+               If $VK_O = $struct.VKey And Not ( $sks($VK_OEM_3) Or ($sks($VK_LSHIFT) And $sks($VK_RSHIFT)) ) Then Return
                For $func in $functionlist
                    If $func() Then $func('deactivate')
                Next
@@ -122,13 +122,13 @@ Func ProcessKeypress($struct)
                TraySetIcon("%windir%\Cursors\aero_link_xl.cur")
                TraySetToolTip('TPMouse - Inactive')
             EndIf
-       Case $VK_C, $VK_G
+       Case $VK_I, $VK_P
             If BitAnd(0x0001,$struct.Flags) Then
-               If $sks($VK_CAPS) Or ($sks($VK_LSHIFT) And $sks($VK_RSHIFT)) Then
-                  Local $act = ( $VK_C=$struct.VKey ? SingletonInertia       : SingletonOverlay )       , _
-                        $ico = ( $VK_C=$struct.VKey ? 'aero_person_xl.cur'   : 'aero_pin_xl.cur' )      , _
-                        $cur = ( $VK_C=$struct.VKey ? CopyIcon($hCursors[1]) : CopyIcon($hCursors[2]) ) , _
-                        $tip = ( $VK_C=$struct.VKey ? 'TPMouse - Inertia'    : 'TPMouse - Grid')
+               If $sks($VK_OEM_3) Or ($sks($VK_LSHIFT) And $sks($VK_RSHIFT)) Then
+                  Local $act = ( $VK_I=$struct.VKey ? SingletonInertia       : SingletonOverlay )       , _
+                        $ico = ( $VK_I=$struct.VKey ? 'aero_person_xl.cur'   : 'aero_pin_xl.cur' )      , _
+                        $cur = ( $VK_I=$struct.VKey ? CopyIcon($hCursors[1]) : CopyIcon($hCursors[2]) ) , _
+                        $tip = ( $VK_I=$struct.VKey ? 'TPMouse - Inertia'    : 'TPMouse - Grid')
                   For $func in $functionlist
                       If $func() and not ($func=$act) Then $func('deactivate')
                   Next
@@ -138,6 +138,8 @@ Func ProcessKeypress($struct)
                   TraySetToolTip($tip)
                EndIf
             EndIf
+
+
        Case $_('up')
             If BitAnd(0x0001,$struct.Flags) Then SingletonOverlay('up')
        Case $_('left')
@@ -525,9 +527,9 @@ EndFunc
 Func SingletonKeybinds($action, $mode=0)
      ; mode 0 returns vkey, mode 1 returns hotkey
      Local Static _
-           $up     = [ $VK_I     , '{i}'     ] , _
-           $left   = [ $VK_J     , '{j}'     ] , _
-           $down   = [ $VK_K     , '{k}'     ] , _
+           $up     = [ $VK_K     , '{k}'     ] , _
+           $left   = [ $VK_H     , '{h}'     ] , _
+           $down   = [ $VK_J     , '{j}'     ] , _
            $right  = [ $VK_L     , '{l}'     ] , _
            $mb1    = [ $VK_F     , '{f}'     ] , _
            $mb2    = [ $VK_E     , '{e}'     ] , _
@@ -580,9 +582,9 @@ Func TranslateHotKeys()
      EndIf
 EndFunc
 Func InitializeKeybinds(ByRef $up,ByRef $left,ByRef $down,ByRef $right,ByRef $mb1,ByRef $mb2,ByRef $mb3,ByRef $brake,ByRef $scroll)
-     Local $upKey     = IniRead('options.ini','Bindings','up'    , 'VK_I')
-     Local $leftKey   = IniRead('options.ini','Bindings','left'  , 'VK_J')
-     Local $downKey   = IniRead('options.ini','Bindings','down'  , 'VK_K')
+     Local $upKey     = IniRead('options.ini','Bindings','up'    , 'VK_K')
+     Local $leftKey   = IniRead('options.ini','Bindings','left'  , 'VK_H')
+     Local $downKey   = IniRead('options.ini','Bindings','down'  , 'VK_J')
      Local $rightKey  = IniRead('options.ini','Bindings','right' , 'VK_L')
      Local $mb1Key    = IniRead('options.ini','Bindings','mb1'   , 'VK_F')
      Local $mb2Key    = IniRead('options.ini','Bindings','mb2'   , 'VK_E')
