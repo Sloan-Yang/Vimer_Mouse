@@ -1,4 +1,5 @@
 # VimMouse
+📖 中文版文档请见：[README.zh-CN.md](./README.zh-CN.md)
 
 Control the cursor with your hands on the keyboard’s home row — even if you don’t have a ThinkPad.
 

@@ -1,8 +1,9 @@
 # VimMouse
+📘 English version: [README.md](./README.md)
 
 Control the cursor with your hand staying on the keyboard's homerow — even if you don't have a ThinkPad.
 
-🎯 本项目基于原项目 [EsportToys/TPMouse](https://github.com/EsportToys/TPMouse.git) 进行开发。**感谢原作者的贡献！**
+🎯 本项目是基于原项目 [EsportToys/TPMouse](https://github.com/EsportToys/TPMouse.git) 魔改后的。**感谢原作者的贡献！**
 
 ## 本版本改进说明
 
