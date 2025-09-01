@@ -12,6 +12,16 @@ Control the cursor with your hands on the keyboard’s home row — even if you 
 - ✅ Tweaked cursor and scroll speed for smoother control.
 - ✅ **Grid mode** now supports **multi-monitor environments** for precise positioning across screens.
 
+## 🔧 Requirements
+
+To run **VimMouse**, you need to install the following:
+
+- [AutoIt3](https://www.autoitscript.com/site/autoit/downloads/)
+- [SciTE4AutoIt3](https://www.autoitscript.com/site/autoit-script-editor/downloads/)
+
+These tools are required to run, compile, and debug the `.au3` scripts that power VimMouse.
+
+
 ---
 
 ## Inertia Mode

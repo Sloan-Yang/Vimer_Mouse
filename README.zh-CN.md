@@ -11,6 +11,16 @@ Control the cursor with your hand staying on the keyboard's homerow — even if 
 - ✅ 调整了光标和滚轮的移动速度，操作更顺畅。
 - ✅ **Grid 模式** 现已支持 **多屏幕 / 多显示器** 精准定位，方便多屏用户快速定位。
 
+## 🔧 运行环境要求
+
+要运行 **VimMouse**，你需要先安装以下组件：
+
+- [AutoIt3](https://www.autoitscript.com/site/autoit/downloads/)
+- [SciTE4AutoIt3](https://www.autoitscript.com/site/autoit-script-editor/downloads/)
+
+这两个工具用于运行、编译和调试 `.au3` 脚本，是 VimMouse 的运行基础。
+
+
 ---
 
 ## Inertia 模式
