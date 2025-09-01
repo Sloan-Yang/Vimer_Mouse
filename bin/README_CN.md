@@ -16,11 +16,15 @@ Control the cursor with your hand staying on the keyboard's homerow — even if 
 
 ![image](https://user-images.githubusercontent.com/98432183/197381484-b4e669f0-c5bd-42af-a469-f21f5191a6a3.png)
 
-1. 激活方式：`CapsLk + C` 或 `LShift + RShift + C`。
-2. 使用 `K`/`H`/`J`/`L` 控制光标方向。  
-   按住 `S` 可刹车以进行更精确的移动；按住 `Space` 可滚动页面。
-3. 使用 `A`/`D`/`W` 分别进行左键 / 右键 / 中键点击。
-4. 退出方式：`CapsLk + Q`、`LShift + RShift + Q` 或 `Esc`。
+1. **激活方式**：<code>\`I</code>（反引号 + I）
+2. 使用 `H`/`J`/`K`/`L` 控制光标方向：
+   - `H`：向左
+   - `J`：向下
+   - `K`：向上
+   - `L`：向右
+3. 按住 `S` 可刹车以进行更精确的移动；按住 `Space` 可滚动页面。
+4. 使用 `A`/`D`/`W` 分别进行左键 / 右键 / 中键点击。
+5. **退出方式**：<code>\`O</code>（反引号 + O）或按 `Esc`。
 
 ---
 
@@ -28,12 +32,12 @@ Control the cursor with your hand staying on the keyboard's homerow — even if 
 
 ![image](https://user-images.githubusercontent.com/98432183/197323322-09607efb-c940-4add-95e8-660c94c18306.png)
 
-1. 激活方式：`CapsLk + G` 或 `LShift + RShift + G`。
-2. 屏幕上会出现红框，使用 `K`/`H`/`J`/`L` 缩小定位范围。
+1. **激活方式**：<code>\`P</code>（反引号 + P）
+2. 屏幕上会出现红框，使用 `H`/`J`/`K`/`L` 缩小定位范围。
 3. 使用 `A`/`D`/`W` 进行点击（左/右/中键）。
 4. 退出方式同上。
 
-🆕 **多屏支持**：你可以使用数字键快速切换到不同显示器上的 Grid 模式，边框会自动定位到对应屏幕区域。
+🆕 **多屏支持**：你可以使用数字键（0–9）快速切换到不同显示器上的 Grid 模式，边框会自动定位到对应屏幕区域。
 
 ---
 
@@ -70,3 +74,4 @@ mb2=VK_D
 mb3=VK_W
 brake=VK_S
 scroll=VK_SPACE
+

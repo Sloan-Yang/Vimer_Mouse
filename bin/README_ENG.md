@@ -1,15 +1,15 @@
 # VimMouse
 
-Control the cursor while keeping your hands on the home row — no need for a ThinkPad.
+Control the cursor with your hands on the keyboard’s home row — even if you don’t have a ThinkPad.
 
-🔧 This project is a customized version of [EsportToys/TPMouse](https://github.com/EsportToys/TPMouse.git).  
-**Credit to the original author!**
+🎯 This project is based on [EsportToys/TPMouse](https://github.com/EsportToys/TPMouse.git).  
+**Many thanks to the original author for their great work!**
 
-## What's Improved in This Version
+## Improvements in This Version
 
-- ✅ Key bindings are redesigned for **Vim enthusiasts** — using familiar `HJKL` navigation.
-- ✅ Cursor and scroll speeds are adjusted for smoother control.
-- ✅ **Grid Mode** now supports **multi-monitor** environments, allowing precise cross-screen cursor placement.
+- ✅ Keybindings optimized for **Vim users**.
+- ✅ Tweaked cursor and scroll speed for smoother control.
+- ✅ **Grid mode** now supports **multi-monitor environments** for precise positioning across screens.
 
 ---
 
@@ -17,16 +17,19 @@ Control the cursor while keeping your hands on the home row — no need for a Th
 
 ![image](https://user-images.githubusercontent.com/98432183/197381484-b4e669f0-c5bd-42af-a469-f21f5191a6a3.png)
 
-1. Activate with `CapsLk + C` or `LShift + RShift + C`.  
-   Your main cursor will change to a crosshair.
-2. Move the cursor using `K`/`H`/`J`/`L`.
-   - Hold `S` to brake and slow movement for precise aiming.
-   - Hold `Space` to scroll both vertically and horizontally.
-3. Click with:
+1. **Activate** with <code>\`I</code> (Backtick + I).
+2. Move the cursor using `H` / `J` / `K` / `L`:
+   - `H`: Left
+   - `J`: Down
+   - `K`: Up
+   - `L`: Right
+3. Hold `S` to brake for more precise movement.  
+   Hold `Space` to scroll horizontally/vertically.
+4. Click with:
    - `A`: Left Click
    - `D`: Right Click
    - `W`: Middle Click
-4. Quit using `CapsLk + Q`, `LShift + RShift + Q`, or just `Esc`.
+5. **Exit** with <code>\`O</code> (Backtick + O) or `Esc`.
 
 ---
 
@@ -34,21 +37,16 @@ Control the cursor while keeping your hands on the home row — no need for a Th
 
 ![image](https://user-images.githubusercontent.com/98432183/197323322-09607efb-c940-4add-95e8-660c94c18306.png)
 
-1. Activate with `CapsLk + G` or `LShift + RShift + G`.
-   - A red frame will appear around your screen.
-2. Use `K`/`H`/`J`/`L` to shrink the selection area.
-3. Click with:
-   - `A`: Left Click
-   - `D`: Right Click
-   - `W`: Middle Click
-4. Quit using `CapsLk + Q`, `LShift + RShift + Q`, or just `Esc`.
+1. **Activate** with <code>\`P</code> (Backtick + P).
+2. A red grid overlay will appear. Use `H`/`J`/`K`/`L` to narrow down the search area.
+3. Click with `A` (left), `D` (right), or `W` (middle).
+4. **Exit** with <code>\`O</code> or `Esc`.
 
-🆕 **Multi-Monitor Support**:  
-You can now press a number key (`0`–`9`) to quickly switch the red frame to a different monitor for seamless multi-screen navigation.
+🆕 **Multi-monitor support**: Use number keys (`0`–`9`) to quickly switch and target grid mode on a specific screen. The grid will automatically snap to that monitor.
 
 ---
 
-## Demo
+## Demo Videos
 
 ### Inertia Mode
 
@@ -62,8 +60,7 @@ https://user-images.githubusercontent.com/98432183/198895269-4a5b7266-f662-491c-
 
 ## Configuration: `options.ini`
 
-You can customize inertia behavior and key bindings by editing the `options.ini` file.  
-If the file doesn't exist, the following default values are used:
+You can customize keybindings and inertia parameters via the `options.ini` file. If the file is missing, the script falls back to these defaults:
 
 ```ini
 [Inertia]
@@ -82,6 +79,4 @@ mb2=VK_D
 mb3=VK_W
 brake=VK_S
 scroll=VK_SPACE
-
-
 
