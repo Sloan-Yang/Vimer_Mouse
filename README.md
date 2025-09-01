@@ -51,7 +51,8 @@ These tools are required to run, compile, and debug the `.au3` scripts that powe
 1. **Activate** with <code>\`P</code> (Backtick + P).
 2. A red grid overlay will appear. Use `H`/`J`/`K`/`L` to narrow down the search area.
 3. Click with `A` (left), `D` (right), or `W` (middle).
-4. **Exit** with <code>\`O</code> or `Esc`.
+4. press 0,1,2... to focus on different monitor.
+5. **Exit** with <code>\`O</code> or `Esc`.
 
 🆕 **Multi-monitor support**: Use number keys (`0`–`9`) to quickly switch and target grid mode on a specific screen. The grid will automatically snap to that monitor.
 
