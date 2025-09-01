@@ -1,12 +1,18 @@
 #NoTrayIcon
 #OnAutoItStartRegister SetProcessDPIAware
 #include 'vkeys.au3'
+#include "C:\Program Files (x86)\AutoIt3\Include\WinAPIGdi.au3"
+#include "C:\Program Files (x86)\AutoIt3\Include\Array.au3"
+
+
+
 If IsAdmin() Then Sleep(100)
 
 DllCall("kernel32.dll", "handle", "CreateMutexW", "struct*", 0, "bool", 1, "wstr", "TPMouse")
 If 183 = DllCall("kernel32.dll", "dword", "GetLastError")[0] Then Exit
 
 Global $HOTKEY_STR_MAP
+Global $gCurrentScreenIndex = 0 ; 初始聚焦主屏幕
 
 Opt('TrayAutoPause',0)
 Opt('TrayOnEventMode',1)
@@ -27,6 +33,7 @@ SingletonOverlay('init')
 SingletonInertia('init')
 OnAutoItExitRegister(Cleanup)
 ProgramLoop()
+
 
 Func Elevate()
      ShellExecute( @AutoItExe , @Compiled ? '' : @ScriptFullPath , '' , 'runas' )
@@ -138,6 +145,21 @@ Func ProcessKeypress($struct)
                   TraySetToolTip($tip)
                EndIf
             EndIf
+
+          Case 0x30 To 0x39 ; VK_0 (0x30) to VK_9 (0x39)
+               If BitAND($struct.Flags, 0x0001) Then ; Trigger on key release
+                    If SingletonOverlay() Then
+                         Local $newIndex = $struct.VKey - 0x30
+                         If $newIndex <> $gCurrentScreenIndex Then
+                              Local $aMonitors = _WinAPI_EnumDisplayMonitors()
+                              If $newIndex < $aMonitors[0][0] Then
+                                   $gCurrentScreenIndex = $newIndex
+                                   SingletonOverlay('reset') ; Reset border to the new screen
+                              EndIf
+                         EndIf
+                    EndIf
+               EndIf
+
 
 
        Case $_('up')
@@ -306,12 +328,62 @@ Func SingletonInertia($msg=null,$arg=null)
      Return $self.active
 EndFunc
 
+Func Min($a, $b)
+    If $a < $b Then
+        Return $a
+    Else
+        Return $b
+    EndIf
+EndFunc
+
+Func Max($a, $b)
+    If $a > $b Then
+        Return $a
+    Else
+        Return $b
+    EndIf
+EndFunc
+
+Func GetScreenRect($index)
+    Local $aMonitors = _WinAPI_EnumDisplayMonitors()
+    Local $count = $aMonitors[0][0]
+    If $index < 0 Or $index >= $count Then Return SetError(1, 0, 0)
+
+    Local $hMonitor = $aMonitors[$index + 1][0] ; 注意 +1 是因为 [0][0] 是数量
+    Local $info = _WinAPI_GetMonitorInfo($hMonitor)
+    If @error Then Return SetError(2, 0, 0)
+
+    Local $rect = $info[0]
+    Local $left = DllStructGetData($rect, 1)
+    Local $top = DllStructGetData($rect, 2)
+    Local $right = DllStructGetData($rect, 3)
+    Local $bottom = DllStructGetData($rect, 4)
+
+    ;ConsoleWrite("[ScreenRect] Monitor #" & $index & " : Left=" & $left & ", Top=" & $top & ", Right=" & $right & ", Bottom=" & $bottom & @CRLF)
+
+    Local $aResult[4] = [$left, $top, $right, $bottom]
+    Return $aResult
+EndFunc
+
+
+
+
+
+
 Func SingletonOverlay($msg=null,$arg=null)
-     Local Static $hOverlay, $hFrame, $self = DllStructCreate('bool active;uint left;uint right;uint top;uint bottom')
+     Local Static $hOverlay, $hFrame, $self = DllStructCreate('bool active;uint left;uint right;uint top;uint bottom;uint cursor_left;uint cursor_right;uint cursor_top;uint cursor_bottom; uint previous_cursor_x;uint previous_cursor_y ')
      Switch $msg
        Case 'init'
-             $hOverlay = GUICreate("Overlay",@DesktopWidth,@DesktopHeight,0,0,0x80000000,0x02080088)
-             $hFrame = GUICtrlCreateGraphic(0,0,@DesktopWidth,@DesktopHeight)
+               $self.previous_cursor_x = -1
+               $self.previous_cursor_y = -1
+
+               Local $rect = GetScreenRect($gCurrentScreenIndex)
+               Local $left = $rect[0], $top = $rect[1], $right = $rect[2], $bottom = $rect[3]
+               Local $width = $right - $left, $height = $bottom - $top
+
+               $hOverlay = GUICreate("Overlay", $width, $height, $left, $top, 0x80000000, 0x02080088)
+               $hFrame = GUICtrlCreateGraphic(0, 0, $width, $height)
+
              GUISetBkColor(0xe1e1e1,$hOverlay)   ; sets window color
              GUICtrlSetColor($hFrame,0xff0000)   ; sets border color
              GUICtrlSetBkColor($hFrame,0xe1e1e1) ; sets canvas color
@@ -319,18 +391,47 @@ Func SingletonOverlay($msg=null,$arg=null)
              GUISetState(@SW_DISABLE)
        Case 'set'
             GUICtrlSetPos($hFrame,$self.left,$self.top,$self.right-$self.left,$self.bottom-$self.top)
-       Case 'reset'
-            $self.left = 0
-            $self.top = 0
-            $self.right = @DesktopWidth
-            $self.bottom = @DesktopHeight
-            SingletonOverlay('set')
+
+     Case 'reset'
+          Local $rect = GetScreenRect($gCurrentScreenIndex)
+
+          $self.left   = $rect[0]
+          $self.top    = $rect[1]
+          $self.right  = $rect[2]
+          $self.bottom = $rect[3]
+
+          $self.cursor_left   = $rect[0]
+          $self.cursor_top    = $rect[1]
+          $self.cursor_right  = $rect[2]
+          $self.cursor_bottom = $rect[3]
+
+          Local $width  = $self.right - $self.left
+          Local $height = $self.bottom - $self.top
+
+          WinMove($hOverlay, "", $self.left, $self.top, $width, $height)
+          GUICtrlSetPos($hFrame, 0, 0, $width, $height)
+
+          $self.previous_cursor_x = Int($self.left + $width / 2)
+          $self.previous_cursor_y = Int($self.top + $height / 2)
+          SetCursorPos(  $self.previous_cursor_x , $self.previous_cursor_y )
+
+
+          $self.right  = $self.right -  $self.left
+          $self.bottom = $self.bottom - $self.top
+          $self.left   = 0 
+          $self.top    = 0
+
        Case 'activate'
             SingletonOverlay('reset')
             If Not $self.active Then
                $self.active = True
                GUISetState(@SW_SHOW,$hOverlay)
-               SetCursorPos(Int(($self.left+$self.right)/2),Int(($self.top+$self.bottom)/2))
+               If $self.previous_cursor_x <> -1 And $self.previous_cursor_y <> -1 Then
+                    SetCursorPos($self.previous_cursor_x, $self.previous_cursor_y)
+               Else
+                    SetCursorPos(Int(($self.left + $self.right) / 2), Int(($self.top + $self.bottom) / 2))
+               EndIf
+
                SingletonMoupress('activate')
             EndIf
        Case 'deactivate'
@@ -339,30 +440,35 @@ Func SingletonOverlay($msg=null,$arg=null)
                $self.active = False
                SingletonMoupress('deactivate')
                GUISetState(@SW_HIDE,$hOverlay)
+
             EndIf
        Case 'up'
             If $self.active Then
                $self.bottom = Int(($self.top+$self.bottom)/2)
+               $self.cursor_bottom = Int(($self.cursor_top+$self.cursor_bottom)/2)
                SingletonOverlay('set')
-               SetCursorPos( Int(($self.left+$self.right)/2), Int(($self.top+$self.bottom)/2) )
+               SetCursorPos( Int(($self.cursor_left+$self.cursor_right)/2), Int(($self.cursor_top+$self.cursor_bottom)/2) )
             EndIf
        Case 'left'
             If $self.active Then
                $self.right  = Int(($self.left+$self.right)/2)
+               $self.cursor_right  = Int(($self.cursor_left+$self.cursor_right)/2)
                SingletonOverlay('set')
-               SetCursorPos( Int(($self.left+$self.right)/2), Int(($self.top+$self.bottom)/2) )
+               SetCursorPos( Int(($self.cursor_left+$self.cursor_right)/2), Int(($self.cursor_top+$self.cursor_bottom)/2) )
             EndIf
        Case 'down'
             If $self.active Then
                $self.top    = Int(($self.top+$self.bottom)/2)
+               $self.cursor_top    = Int(($self.cursor_top+$self.cursor_bottom)/2)
                SingletonOverlay('set')
-               SetCursorPos( Int(($self.left+$self.right)/2), Int(($self.top+$self.bottom)/2) )
+               SetCursorPos( Int(($self.cursor_left+$self.cursor_right)/2), Int(($self.cursor_top+$self.cursor_bottom)/2) )
             EndIf
        Case 'right'
             If $self.active Then
                $self.left   = Int(($self.left+$self.right)/2)
+               $self.cursor_left   = Int(($self.cursor_left+$self.cursor_right)/2)
                SingletonOverlay('set')
-               SetCursorPos(Int(($self.left+$self.right)/2), Int(($self.top+$self.bottom)/2))
+               SetCursorPos(Int(($self.cursor_left+$self.cursor_right)/2), Int(($self.cursor_top+$self.cursor_bottom)/2))
             EndIf
        Case Else
      EndSwitch
