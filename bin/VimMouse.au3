@@ -8,7 +8,7 @@
 
 If IsAdmin() Then Sleep(100)
 
-DllCall("kernel32.dll", "handle", "CreateMutexW", "struct*", 0, "bool", 1, "wstr", "TPMouse")
+DllCall("kernel32.dll", "handle", "CreateMutexW", "struct*", 0, "bool", 1, "wstr", "VimMouse")
 If 183 = DllCall("kernel32.dll", "dword", "GetLastError")[0] Then Exit
 
 Global $HOTKEY_STR_MAP
@@ -20,9 +20,9 @@ Opt('TrayMenuMode',1+2)
 If Not IsAdmin() Then TrayItemSetOnEvent(TrayCreateItem('Restart as admin'),Elevate)
 TrayItemSetOnEvent(TrayCreateItem('Open config'),OpenConfig)
 TrayItemSetOnEvent(TrayCreateItem('Reload config'),ReloadKeybinds)
-TrayItemSetOnEvent(TrayCreateItem('Quit TPMouse'),Quit)
+TrayItemSetOnEvent(TrayCreateItem('Quit VimMouse'),Quit)
 TraySetIcon('%windir%\Cursors\aero_link_xl.cur')
-TraySetToolTip('TPMouse - Inactive')
+TraySetToolTip('VimMouse - Inactive')
 Global $user32 = DllOpen('user32.dll')     
 Global $hInputWnd = GUICreate('')
 Global $hCursors = [CopyIcon(GetSystemCursor('NORMAL')),CopyIcon(GetSystemCursor('CROSS')),CopyIcon(GetSystemCursor('SIZEALL'))]
@@ -127,7 +127,7 @@ Func ProcessKeypress($struct)
                Next
                DllCall($user32, "bool", "SetSystemCursor", "handle", CopyIcon($hCursors[0]), "dword", 32512)
                TraySetIcon("%windir%\Cursors\aero_link_xl.cur")
-               TraySetToolTip('TPMouse - Inactive')
+               TraySetToolTip('VimMouse - Inactive')
             EndIf
        Case $VK_I, $VK_P
             If BitAnd(0x0001,$struct.Flags) Then
@@ -135,7 +135,7 @@ Func ProcessKeypress($struct)
                   Local $act = ( $VK_I=$struct.VKey ? SingletonInertia       : SingletonOverlay )       , _
                         $ico = ( $VK_I=$struct.VKey ? 'aero_person_xl.cur'   : 'aero_pin_xl.cur' )      , _
                         $cur = ( $VK_I=$struct.VKey ? CopyIcon($hCursors[1]) : CopyIcon($hCursors[2]) ) , _
-                        $tip = ( $VK_I=$struct.VKey ? 'TPMouse - Inertia'    : 'TPMouse - Grid')
+                        $tip = ( $VK_I=$struct.VKey ? 'VimMouse - Inertia'    : 'VimMouse - Grid')
                   For $func in $functionlist
                       If $func() and not ($func=$act) Then $func('deactivate')
                   Next
