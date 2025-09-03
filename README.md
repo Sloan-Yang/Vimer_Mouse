@@ -26,7 +26,6 @@ These tools are required to run, compile, and debug the `.au3` scripts that powe
 
 ## Inertia Mode
 
-![image](https://user-images.githubusercontent.com/98432183/197381484-b4e669f0-c5bd-42af-a469-f21f5191a6a3.png)
 
 1. **Activate** with <code>\`I</code> (Backtick + I).
 2. Move the cursor using `H` / `J` / `K` / `L`:
@@ -46,7 +45,6 @@ These tools are required to run, compile, and debug the `.au3` scripts that powe
 
 ## Grid Mode
 
-![image](https://user-images.githubusercontent.com/98432183/197323322-09607efb-c940-4add-95e8-660c94c18306.png)
 
 1. **Activate** with <code>\`P</code> (Backtick + P).
 2. A red grid overlay will appear. Use `H`/`J`/`K`/`L` to narrow down the search area.

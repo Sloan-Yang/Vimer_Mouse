@@ -25,7 +25,6 @@ Control the cursor with your hand staying on the keyboard's homerow — even if 
 
 ## Inertia 模式
 
-![image](https://user-images.githubusercontent.com/98432183/197381484-b4e669f0-c5bd-42af-a469-f21f5191a6a3.png)
 
 1. **激活方式**：<code>\`I</code>（反引号 + I）
 2. 使用 `H`/`J`/`K`/`L` 控制光标方向：
@@ -41,7 +40,6 @@ Control the cursor with your hand staying on the keyboard's homerow — even if 
 
 ## Grid 模式
 
-![image](https://user-images.githubusercontent.com/98432183/197323322-09607efb-c940-4add-95e8-660c94c18306.png)
 
 1. **激活方式**：<code>\`P</code>（反引号 + P）
 2. 屏幕上会出现红框，使用 `H`/`J`/`K`/`L` 缩小定位范围。
